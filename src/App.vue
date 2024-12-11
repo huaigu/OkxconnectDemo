@@ -92,6 +92,9 @@ const connectAptos = async () => {
 const sendAptos = async () => {
   await connectAptos();
 
+  let provider = new OKXAptosProvider(okxUniversalConnectUI)
+  let toAddress = provider.getAccount("aptos:mainnet").address;
+
   const transactionData = {
     arguments: [toAddress, `1000}`], // aptos deciaml 10^8
     function: '0x1::coin::transfer',
@@ -100,7 +103,6 @@ const sendAptos = async () => {
   };
 
 
-  let provider = new OKXAptosProvider(okxUniversalConnectUI)
 
   console.log("sending transaction...");
 
