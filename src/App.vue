@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { OKXUniversalProvider } from "@okxconnect/universal-provider";
+import { OKXAptosProvider } from "@okxconnect/aptos-provider";
 import { OKXUniversalConnectUI, THEME } from "@okxconnect/ui";
 
 let account;
