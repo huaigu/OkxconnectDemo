@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { OKXUniversalProvider } from "@okxconnect/universal-provider";
 import { OKXAptosProvider } from "@okxconnect/aptos-provider";
 import { OKXUniversalConnectUI, THEME } from "@okxconnect/ui";
+import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
 
 let account;
 const okxUniversalProvider = ref(null);
@@ -96,19 +97,37 @@ const sendAptos = async () => {
   let provider = new OKXAptosProvider(okxUniversalConnectUI)
   let toAddress = provider.getAccount("aptos:mainnet").address;
 
-  const transactionData = {
-    arguments: [toAddress, `1000}`], // aptos deciaml 10^8
-    function: '0x1::coin::transfer',
-    type: 'entry_function_payload',
-    type_arguments: ['0x1::aptos_coin::AptosCoin'],
-  };
+  // const transactionData = {
+  //   arguments: [toAddress, `1000}`], // aptos deciaml 10^8
+  //   function: '0x1::coin::transfer',
+  //   type: 'entry_function_payload',
+  //   type_arguments: ['0x1::aptos_coin::AptosCoin'],
+  // };
 
+  const config = new AptosConfig({ network: Network.MAINNET });
+  const aptos = new Aptos(config);
+
+  const payload = {
+    sender: toAddress,
+    data: {
+      function: '0x1::coin::transfer',
+      typeArguments: ['0x1::aptos_coin::AptosCoin'],
+      functionArguments: [toAddress, `100`],
+    },
+  }
+
+  console.log(`payload: ${JSON.stringify(payload)}`);
+  const transactionData = await aptos.transaction.build.simple(payload);
 
 
   console.log("sending transaction...");
 
-  await provider.signAndSubmitTransaction(transactionData, "aptos:mainnet")
-
+  try{
+    await provider.signAndSubmitTransaction(transactionData, "aptos:mainnet")
+  }catch(e){
+    alert(JSON.stringify(e));
+    console.log("error: ", e);
+  }
 }
 
 </script>
