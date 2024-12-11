@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@okxconnect/aptos-provider": "^1.5.6",
     "@okxconnect/ui": "^1.5.4",
     "@okxconnect/universal-provider": "^1.5.4",
     "lodash": "^4.17.21",
